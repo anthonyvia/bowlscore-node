@@ -54,11 +54,21 @@ var Frame = React.createClass({
   },
 
   render: function () {
+    var balls = [
+      <input key="ballOne" className="frame-input" type="text" maxLength="2" defaultValue={this.state.ballOne} ref="ballOne" onChange={this.handleChange.bind(null, "1")}/>,
+      <input key="ballTwo" className="frame-input" type="text" maxLength="2" defaultValue={this.state.ballTwo} ref="ballTwo" onChange={this.handleChange.bind(null, "2")}/>
+    ];
+
+    if (this.props.frameNumber === "10") {
+      balls.push(
+        <input key="ballThree" className="frame-input" type="text" maxLength="2" defaultValue={this.state.ballTwo} ref="ballThree" onChange={this.handleChange.bind(null, "3")}/>
+      );
+    }
+
     return (
       <div>
         <span>{this.props.frameNumber}</span>
-        <input className="frame-input" type="text" maxLength="2" defaultValue={this.state.ballOne} ref="ballOne" onChange={this.handleChange.bind(null, "1")}/>
-        <input className="frame-input" type="text" maxLength="2" defaultValue={this.state.ballTwo} ref="ballTwo" onChange={this.handleChange.bind(null, "2")}/>
+        {balls}
       </div>
     );
   }
