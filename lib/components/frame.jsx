@@ -1,6 +1,7 @@
 var React = require('react');
 
 var Frame = React.createClass({
+
   getInitialState: function () {
     return (
       {

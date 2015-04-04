@@ -1,4 +1,5 @@
 var React = require('react');
+var superagent = require('superagent');
 var Frame = require('./components/frame.jsx');
 var Total = require('./components/total.jsx');
 
@@ -10,18 +11,31 @@ var App = React.createClass({
   },
 
   updateTotal: function () {
-    var total = this.refs.frameOne.state.ballOne + this.refs.frameOne.state.ballTwo +
-      this.refs.frameTwo.state.ballOne + this.refs.frameTwo.state.ballTwo +
-      this.refs.frameThree.state.ballOne + this.refs.frameThree.state.ballTwo +
-      this.refs.frameFour.state.ballOne + this.refs.frameFour.state.ballTwo +
-      this.refs.frameFive.state.ballOne + this.refs.frameFive.state.ballTwo +
-      this.refs.frameSix.state.ballOne + this.refs.frameSix.state.ballTwo +
-      this.refs.frameSeven.state.ballOne + this.refs.frameSeven.state.ballTwo +
-      this.refs.frameEight.state.ballOne + this.refs.frameEight.state.ballTwo +
-      this.refs.frameNine.state.ballOne + this.refs.frameNine.state.ballTwo +
-      this.refs.frameTen.state.ballOne + this.refs.frameTen.state.ballTwo + this.refs.frameTen.state.ballThree;
+    var self = this;
+    var frames = [
+      { ballOne: this.refs.frameOne.state.ballOne, ballTwo: this.refs.frameOne.state.ballTwo },
+      { ballOne: this.refs.frameTwo.state.ballOne, ballTwo: this.refs.frameTwo.state.ballTwo },
+      { ballOne: this.refs.frameThree.state.ballOne, ballTwo: this.refs.frameThree.state.ballTwo },
+      { ballOne: this.refs.frameFour.state.ballOne, ballTwo: this.refs.frameFour.state.ballTwo },
+      { ballOne: this.refs.frameFive.state.ballOne, ballTwo: this.refs.frameFive.state.ballTwo },
+      { ballOne: this.refs.frameSix.state.ballOne, ballTwo: this.refs.frameSix.state.ballTwo },
+      { ballOne: this.refs.frameSeven.state.ballOne, ballTwo: this.refs.frameSeven.state.ballTwo },
+      { ballOne: this.refs.frameEight.state.ballOne, ballTwo: this.refs.frameEight.state.ballTwo },
+      { ballOne: this.refs.frameNine.state.ballOne, ballTwo: this.refs.frameNine.state.ballTwo },
+      { ballOne: this.refs.frameTen.state.ballOne, ballTwo: this.refs.frameTen.state.ballTwo, ballThree: this.refs.frameTen.state.ballThree }
+    ];
 
-    this.setState({ total: total });
+    superagent
+      .post('/api/score')
+      .send({ frames: frames })
+      .end(function (error, response) {
+        if (error) {
+          console.log('error getting score');
+          console.log(error);
+        }
+
+        self.setState({ total: response.body.score });
+      });
   },
 
   render: function () {
